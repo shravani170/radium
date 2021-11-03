@@ -1,0 +1,108 @@
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+Try the new cross-platform PowerShell https://aka.ms/pscore6
+
+PS C:\Users\LENOVO> pwd
+
+Path
+----
+C:\Users\LENOVO
+
+cd : Cannot find path 'C:\Users\LENOVO\c\functionup\demo' because it does not exist.
+At line:1 char:1
++ cd c\functionup\demo
++ ~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : ObjectNotFound: (C:\Users\LENOVO\c\functionup\demo:String) [Set-Location], ItemNotFoundException       
+    + FullyQualifiedErrorId : PathNotFound,Microsoft.PowerShell.Commands.SetLocationCommand
+ 
+PS C:\functionup> cd demo
+PS C:\functionup\demo> mkdir assignment
+
+
+    Directory: C:\functionup\demo
+
+
+----                 -------------         ------ ----
+d-----        02-11-2021     18:49                assignment
+
+
+PS C:\functionup\demo> cd..
+PS C:\functionup> cd assignment
+cd : Cannot find path 'C:\functionup\assignment' because it does not exist.
+At line:1 char:1
++ cd assignment
++ ~~~~~~~~~~~~~
+    + FullyQualifiedErrorId : PathNotFound,Microsoft.PowerShell.Commands.SetLocationCommand
+ 
+PS C:\functionup> cd demo
+PS C:\functionup\demo> cd assignment
+PS C:\functionup\demo\assignment> cd source
+cd : Cannot find path 'C:\functionup\demo\assignment\source' because it does not exist.
+At line:1 char:1
++ cd source
++ ~~~~~~~~~
+    + CategoryInfo          : ObjectNotFound: (C:\functionup\demo\assignment\source:String) [Set-Location], ItemNotFoundException    
+PS C:\functionup\demo\assignment> mkdir source
+
+
+    Directory: C:\functionup\demo\assignment
+
+
+Mode                 LastWriteTime         Length Name
+----                 -------------         ------ ----
+
+
+PS C:\functionup\demo\assignment> mkdir destination
+
+
+
+    Directory: C:\functionup\demo\assignment
+    Directory: C:\functionup\demo\assignment
+
+
+the spelling
+of the name, or if a path was included, verify that the path is correct and try again.
+At line:1 char:1
++ touch file.txt
++ ~~~~~
+    + CategoryInfo          : ObjectNotFound: (touch:String) [], CommandNotFoundException
+    + FullyQualifiedErrorId : CommandNotFoundException
+hell.Commands.CopyItemCommand                              ndException
+                                                           hell.Commands.CopyItemCommand
+PS C:\functionup\demo\assignment> cp source/file.txt destinatio                                                       atio
+
+
+
+
+
+
+cp : Cannot find path 'C:\functionup\demo\assignment\source\file.txt' because it does not exist.\file.txt' because it does not exist.
+    + CategoryInfo          : ObjectNotFound: (C:\functionup\d...source\file.txt:String) [Copy-Item], ItemNotFoundException
+    + FullyQualifiedErrorId : PathNotFound,Microsoft.PowerShell.Commands.CopyItemCommand
+
+PS C:\functionup\demo\assignment> cd source
+PS C:\functionup\demo\assignment\source> copy file.txt destination
+copy : Cannot find path
+'C:\functionup\demo\assignment\source\file.txt' because
+it does not exist.
+At line:1 char:1
++ copy file.txt destination
++ ~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : ObjectNotFound: (C:\functio
+   nup\d...source\file.txt:String) [Copy-Item], ItemNotF
+  oundException
+    + FullyQualifiedErrorId : PathNotFound,Microsoft.Powe
+   rShell.Commands.CopyItemCommand
+
+PS C:\functionup\demo\assignment\source> copy  C:\functionup\demo\assignment destination
+PS C:\functionup\demo\assignment\source> copy c:\functionup\demo\assignment
+                                                                           
+PS C:\functionup\demo\assignment\source> copy C:\functionup\demo\assignmen\source\file.txt destination
+copy : Cannot find path 'C:\functionup\demo\assignmen\source\file.txt' because it does not exist.
+At line:1 char:1
++ copy C:\functionup\demo\assignmen\source\file.txt destination
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : ObjectNotFound: (C:\functionup\d...source\file.txt:String) [Copy-Item], ItemNotFoundException
+    + FullyQualifiedErrorId : PathNotFound,Microsoft.PowerShell.Commands.CopyItemCommand
+ 
+PS C:\functionup\demo\assignment\source> 
