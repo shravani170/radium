@@ -1,0 +1,105 @@
+LENOVO@DESKTOP-R34AIIP MINGW64 ~
+$ pwd
+/c/Users/LENOVO
+
+LENOVO@DESKTOP-R34AIIP MINGW64 ~
+$ cd ..
+
+LENOVO@DESKTOP-R34AIIP MINGW64 /c/Users
+$ cd ..
+
+LENOVO@DESKTOP-R34AIIP MINGW64 /c
+$ cd functionup
+
+LENOVO@DESKTOP-R34AIIP MINGW64 /c/functionup
+$ cd demo
+
+LENOVO@DESKTOP-R34AIIP MINGW64 /c/functionup/demo
+$ mkdir assignment
+
+LENOVO@DESKTOP-R34AIIP MINGW64 /c/functionup/demo
+$ cd assignment
+
+LENOVO@DESKTOP-R34AIIP MINGW64 /c/functionup/demo/assignment
+$ mkdir source
+
+LENOVO@DESKTOP-R34AIIP MINGW64 /c/functionup/demo/assignment
+$ mkdir destination
+
+LENOVO@DESKTOP-R34AIIP MINGW64 /c/functionup/demo/assignment
+$ cd source
+
+LENOVO@DESKTOP-R34AIIP MINGW64 /c/functionup/demo/assignment/source
+$ cat > file.txt
+function up is adding value to my life
+
+LENOVO@DESKTOP-R34AIIP MINGW64 /c/functionup/demo/assignment/source
+$ cd ..
+
+LENOVO@DESKTOP-R34AIIP MINGW64 /c/functionup/demo/assignment
+$ cp -r source/. destination
+
+LENOVO@DESKTOP-R34AIIP MINGW64 /c/functionup/demo/assignment
+$ li destination
+bash: li: command not found
+
+LENOVO@DESKTOP-R34AIIP MINGW64 /c/functionup/demo/assignment
+$ ls destination
+file.txt
+
+LENOVO@DESKTOP-R34AIIP MINGW64 /c/functionup/demo/assignment
+$ cd destination
+
+LENOVO@DESKTOP-R34AIIP MINGW64 /c/functionup/demo/assignment/destination
+$ rm file.txt
+
+LENOVO@DESKTOP-R34AIIP MINGW64 /c/functionup/demo/assignment/destination
+$ ls destination
+ls: cannot access 'destination': No such file or directory
+
+LENOVO@DESKTOP-R34AIIP MINGW64 /c/functionup/demo/assignment/destination
+$ cd..
+bash: cd..: command not found
+
+LENOVO@DESKTOP-R34AIIP MINGW64 /c/functionup/demo/assignment/destination
+$ cd ..
+
+LENOVO@DESKTOP-R34AIIP MINGW64 /c/functionup/demo/assignment
+$ ls destinatio
+ls: cannot access 'destinatio': No such file or directory
+
+LENOVO@DESKTOP-R34AIIP MINGW64 /c/functionup/demo/assignment
+$ mv source/file.txt destination
+
+LENOVO@DESKTOP-R34AIIP MINGW64 /c/functionup/demo/assignment
+$ cd destination
+
+LENOVO@DESKTOP-R34AIIP MINGW64 /c/functionup/demo/assignment/destination
+$ ls destination
+ls: cannot access 'destination': No such file or directory
+
+LENOVO@DESKTOP-R34AIIP MINGW64 /c/functionup/demo/assignment/destination
+$ cat >> file.txt
+This is dummy text for testing purpose
+
+
+LENOVO@DESKTOP-R34AIIP MINGW64 /c/functionup/demo/assignment/destination
+$ git stash
+fatal: not a git repository (or any of the parent directories): .git
+
+LENOVO@DESKTOP-R34AIIP MINGW64 /c/functionup/demo/assignment/destination
+$ cat >> file.txt
+This is dummy text for testing purpose
+This is dummy text for testing purpose
+functionup This is dummy text for testing purpose
+This is dummy text for testing purpose
+functionup2 not a function
+This is dummy text for testing purpose
+functionup 3 that is good This is dummy text for testing purpose
+This is dummy text for testing purpose
+
+LENOVO@DESKTOP-R34AIIP MINGW64 /c/functionup/demo/assignment/destination
+$ grep -i "functionup" file.txt
+functionup This is dummy text for testing purpose
+functionup2 not a function
+functionup 3 that is good This is dummy text for testing purpose
