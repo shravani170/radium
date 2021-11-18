@@ -11,8 +11,17 @@ const createBook2 = async function (req, res) {
 }
 
 const priceUpdate = async function (req, res) {
-    let priceUpdateBook = await authorMdal.findOneAndUpdate({ name: "Two states" }, { "price": 100 })
-    res.send({ msg: priceUpdateBook })
+    let value=req.body
+    let allUsers = await Book2Model.findOneAndUpdate(value, { price: 100 }, { new: true }).select({ author_id: 1, _id: 0 })
+    let bookwillbe = await Book2Model.findOne(value).select({ name: 1, price: 1, ratings: 1, _id: 0 })
+    let savedData = await authorMdal.findOne(allUsers).select({ author_name: 1, author_id: 1, age: 1, address: 1, _id: 0 })
+
+    res.send({ AuthorNameDetails: savedData, UpdatedBookPrice: bookwillbe })
+}
+const findbook = async function (req, res) {
+    let allUsers = await Book2Model.find({ $and: [{ price: { $gte: 50 } }, { price: { $lte: 100 } }] }).select({ author_id: 1, _id: 0 })
+    let savedata = await authorMdal.find({ $or: allUsers }).select({ author_name: 1, author_id: 1, age: 1, address: 1, _id: 0 })
+    res.send({ msg: savedata })
 }
 
 const findByName = async function (req, res) {
@@ -38,4 +47,5 @@ module.exports.getBookByAuthorName = getBookByAuthorName
 module.exports.createBook2 = createBook2
 module.exports.priceUpdate = priceUpdate
 module.exports.FindByName = FindByName
-module.exports.findByName=findByName
+module.exports.findByName = findByName
+module.exports.findbook = findbook

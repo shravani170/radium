@@ -26,9 +26,8 @@ const authorSchema = new mongoose.Schema({
       type: String,
       required: true
    },
-   BookName: String,
    age: Number,
-   Address: String,
+   address: String,
 },
 
    { timestamps: true })

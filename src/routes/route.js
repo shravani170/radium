@@ -16,8 +16,9 @@ router.get('/getChetanBhagat',  authorController.ChetanBhagat  );
 router.get('/getFindByName',  book2Controller.FindByName  );
 router.get('/getBookByAuthorName',book2Controller.getBookByAuthorName)
 
-router.get('/priceUpdate',book2Controller.priceUpdate)
+router.post('/priceUpdate',book2Controller.priceUpdate)
 
 router.get('/findByName',book2Controller.findByName)
+router.get('/findbook',book2Controller.findbook)
 
 module.exports = router;
