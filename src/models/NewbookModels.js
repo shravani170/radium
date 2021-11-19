@@ -7,7 +7,9 @@ const Book2Schema = new mongoose.Schema({
     name:String,
 
     author:{
+
         type:mongoose.Schema.Types.ObjectId,
+
         ref:'myAuthor'
 
     },
@@ -15,9 +17,13 @@ const Book2Schema = new mongoose.Schema({
     price:Number,
 
     ratings:Number,
+
     pabliser:{
+
         type:mongoose.Schema.Types.ObjectId,
+
         ref:'pabliser',
+        
         required:true
     }
 },
