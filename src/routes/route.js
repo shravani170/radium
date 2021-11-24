@@ -1,23 +1,26 @@
-
 const express = require('express');
-
 const router = express.Router();
 
-const authorController = require("../controllers/authorsController")
+const userControllers=require('../controllers/userControllers')
+const producteControllers=require('../controllers/producteControllers')
+const mid= require("../middlewares/globalMiddleware")
+const price=require("../controllers/priceControllers")
+// router.post('/test-me', function (req, res, next) {    
+//     console.log('Inside the route handler checking the header batch: '+req.headers['batch'])
+//     let host = req.headers['host']
+//     let hostWithName = host + " " + "Sabiha Khan"
+//     console.log('My response headers: '+res.getHeaderNames())
+//     res.setHeader('hostWithName', hostWithName)
+//     //res.send({data: 'I was in the handler'})
+//     //res.finalData = {data: 'I was in the handler'}
+//     next()
+// });
 
-const book2Controller = require("../controllers/NewbookControllers")
+router.post('/createUser',mid.captureInfo,userControllers.createUser)
 
-const pabliserController = require("../controllers/pabliserControllers")
+router.post('/producte',producteControllers.prouduct1)
 
+router.post('/price',mid.captureInfo,price.createOrder)
 
-
-
-router.post('/createAuthor', authorController.createAuthor);
-
-router.post('/createBook2', book2Controller.createBook2);
-
-router.post('/createPabliser', pabliserController.pabliser);
-
-router.get('/getAllBook', book2Controller.getAllBook);
 
 module.exports = router;
