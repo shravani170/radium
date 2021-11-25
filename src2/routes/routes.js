@@ -1,13 +1,9 @@
 const express = require('express')
 const router = express.Router();
-const jwt=require('jsonwebtoken')
-const globMidellwer=require('../globalMidellwear/globMidellwer')
-const user=require('../controllers/userControllers')
 
+const weather=require('../controllers/weatherControllers')
 
-
-router.post('/creatUser',user.createUser)
-router.post('/login',user.login)
-router.get('/user/:userId',globMidellwer.tokenCheck,user.getUser)
-router.put('/user/:userId',globMidellwer.tokenCheck,user.updateEmail)
+router.get("/getWeather",weather.getWeather)
+router.get("/getWeatherOfLondon",weather.getWeatherOfLondon)
+router.get("/getCityTemprature",weather.getCityTemprature)
 module.exports = router;
