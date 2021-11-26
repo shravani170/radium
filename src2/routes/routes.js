@@ -1,9 +1,7 @@
 const express = require('express')
 const router = express.Router();
 
-const weather=require('../controllers/weatherControllers')
+const cripto = require('../controllers/criptoControllers') 
 
-router.get("/getWeather",weather.getWeather)
-router.get("/getWeatherOfLondon",weather.getWeatherOfLondon)
-router.get("/getCityTemprature",weather.getCityTemprature)
+router.post("/cripto", cripto.getCripto)
 module.exports = router;
