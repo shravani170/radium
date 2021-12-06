@@ -47,6 +47,10 @@ const creatCollege = async function (req, res) {
 
 const getInters = async function (req, res) {
   const collegeName = req.query.collegeName;
+  if (!isValidRequestBody(collegeName)) {
+    res.status(400).send({ status: false, message: 'Invalid request parameters. Please provide college Name' });
+    return;
+  }
   let collegeDetail = await collegeModal.findOne({name:collegeName});
   const collegeId = collegeDetail._id
   const  interests =await intersControllers.find({ collegeId:collegeId  });

@@ -20,11 +20,11 @@ const creatInters = async function (req, res) {
 try{
     
     const interns = req.body;
-    const { name, email, mobile,collegeName} = interns
+    const interns1=interns.collegeName
 
-    const collegeDetail = await collegeModal.findOne({collegeName})
+    const collegeDetail = await collegeModal.findOne({name:interns1})
     const collegeId = collegeDetail._id
-
+    const { name, email, mobile,collegeName} = interns
     if (!isValidRequestBody(interns)) {
         res.status(400).send({ status: false, message: 'Invalid request parameters. Please provide college details' })
         return
@@ -38,14 +38,14 @@ try{
         res.status(400).send({ status: false, message: `Email should be a valid email address` })
         return
     }
-    if (!(/^(\+\d{1,3}[- ]?)?\d{10}$/.test(mobile))) {
+    if (!( /^(\+91[\-\s]?)?[0]?(91)?[789]\d{9}$/.test(mobile))) {
         res.status(400).send({ status: false, message: 'Mobile number should be a valide number' })
         return
     }
-    if (!collegeId) {
-        res.status(400).send({ status: false, message: 'Author id is required' })
-        return
-    }
+     if (!collegeName) {
+         res.status(400).send({ status: false, message: ' college Name is required' })
+         return
+     }
     if (!isValidObjectId(collegeId)) {
         res.status(400).send({ status: false, message: `${collegeId} is not a valid college id` })
         return

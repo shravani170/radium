@@ -20,7 +20,7 @@ const intersSchema = new mongoose.Schema({
              require:"mobile number is required",
              validator:{
                  validator:function(mobile){
-                     return /^(\+\d{1,3}[- ]?)?\d{10}$/.test(mobile)
+                     return  /^(\+91[\-\s]?)?[0]?(91)?[789]\d{9}$/.test(mobile);
                  }, message: 'Please fill a valid mobile number', isAsync: false
              }
         }, 
