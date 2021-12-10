@@ -18,15 +18,22 @@ const isValidObjectId = function (ObjectId) {
 }
 const creatInters = async function (req, res) {
 try{
-    
+    res.setHeader('Access-Control-Allow-Origin','*')
     const interns = req.body;
     const interns1=interns.collegeName
-
+    if(interns1==null){
+        res.status(400).send({status:false,message:"please provide college name"})
+        return
+    }
     const collegeDetail = await collegeModal.findOne({name:interns1})
+    if(!collegeDetail){
+        res.status(400).send({status:false,message:"Invalid college Name"})
+        return;
+    }
     const collegeId = collegeDetail._id
-    const { name, email, mobile,collegeName} = interns
+    const { name, email, mobile,collegeName} = interns   //destructuring the request data
     if (!isValidRequestBody(interns)) {
-        res.status(400).send({ status: false, message: 'Invalid request parameters. Please provide college details' })
+        res.status(400).send({ status: false, message: 'Invalid request parameters. Please provide interns details' })
         return
     }
     
@@ -34,15 +41,15 @@ try{
         res.status(400).send({ status: false, message: ' name is required' })
         return
     }
-    if (!(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email))) {
+    if (!(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email))) {         //using regex for validating for email
         res.status(400).send({ status: false, message: `Email should be a valid email address` })
         return
     }
-    if (!( /^(\+91[\-\s]?)?[0]?(91)?[789]\d{9}$/.test(mobile))) {
+    if (!( /^(\+91[\-\s]?)?[0]?(91)?[789]\d{9}$/.test(mobile))) {                //using regex for validating for mobile 
         res.status(400).send({ status: false, message: 'Mobile number should be a valide number' })
         return
     }
-     if (!collegeName) {
+     if (!collegeName) {                                                        //chking is collegeName geting any value or not 
          res.status(400).send({ status: false, message: ' college Name is required' })
          return
      }
@@ -50,7 +57,7 @@ try{
         res.status(400).send({ status: false, message: `${collegeId} is not a valid college id` })
         return
     }
-    const intersData = {
+    const intersData = {                                                      //restructuring the data
         name,
         email,
         collegeId,

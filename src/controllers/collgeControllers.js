@@ -30,14 +30,14 @@ const creatCollege = async function (req, res) {
       res.status(400).send({ status: false, message: 'Full name is required' });
       return;
     }
-    if( /^(http[s]?:\/\/){0,1}(w{3,3}\.)[-a-z0-9+&@#\/%?=~_|!:,.;]*[-a-z0-9+&@#\/%=~_|]/.test(logoLink)) {
+    if( !isValid(logoLink)) {
       res.status(400).send({status: false, message: `URL should be a valid URL address`});
       return;
   }
 
 
       const savedCollgeData = {name,fullName,logoLink}
-      let savedCollge = await collegeModal.create(savedCollgeData);   //saving auther details in "Authors" collection
+      let savedCollge = await collegeModal.create(savedCollgeData);  
       return res.status(201).send({ status: true, msg: savedCollge });
     
   } catch (error) {
@@ -46,18 +46,31 @@ const creatCollege = async function (req, res) {
 }
 
 const getInters = async function (req, res) {
+  try{
+  res.setHeader('Access-Control-Allow-Origin','*')
   const collegeName = req.query.collegeName;
-  if (!isValidRequestBody(collegeName)) {
-    res.status(400).send({ status: false, message: 'Invalid request parameters. Please provide college Name' });
+  if (!collegeName) {
+    res.status(400).send({ status: false, message: ' Please provide college Name ' });
     return;
   }
   let collegeDetail = await collegeModal.findOne({name:collegeName});
+  if(!collegeDetail){
+    res.status(400).send({status: false,message : "Invalid request parameters"})
+    return 
+  }
+  if(collegeDetail.isDeleted==true){
+    res.status(400).send({status:false,message:"college is not exist"})
+  }
   const collegeId = collegeDetail._id
-  const  interests =await intersControllers.find({ collegeId:collegeId  });
-   const {name,fullName,logoLink}=collegeDetail
-   const data={name,fullName,logoLink,interests}
+  const  interests =await intersControllers.find({ collegeId:collegeId  }).select({_id:1,name:1,email:1,mobile:1});
+    const {name,fullName,logoLink}=collegeDetail
+    const data={name,fullName,logoLink,interests}
+    return res.status(200).send({ status: true,  collegeDetails:data});
+}catch(err){
+  res.status(500).send({status:false,message:err.message})
+}
 
-  return res.status(200).send({ status: true,  collegeDetails:data});
+  
   
 }
 

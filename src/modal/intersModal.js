@@ -16,8 +16,10 @@ const intersSchema = new mongoose.Schema({
             }, message: 'Please fill a valid email address', isAsync: false
         }, 
     },
-    mobile: {type:Number,unique:true,
+    mobile: {type:Number,
+             unique:true,
              require:"mobile number is required",
+             trim:true,
              validator:{
                  validator:function(mobile){
                      return  /^(\+91[\-\s]?)?[0]?(91)?[789]\d{9}$/.test(mobile);
@@ -29,4 +31,4 @@ const intersSchema = new mongoose.Schema({
 
 }, { timestamps: true })
 
-module.exports = mongoose.model('inters', intersSchema)
+module.exports = mongoose.model('interndbs', intersSchema)
