@@ -1,4 +1,5 @@
 const bookModal=require('../modal/bookModal')
+const writerModal = require('../modal/writerModal')
 
 const isValid = function (value) {
     if (typeof value === 'undefined' || value === null) return false
@@ -19,11 +20,11 @@ const bookCreation = async function (req, res){
             return;
           }
         const {title,excerpt,userId,ISBN,category,subCategory,review,deletedAt,isDeleted,releasedAt} = book
-        const isIsbnAlreadyUsed = await writerModal.findOne({ ISBN:ISBN });
+        const isIsbnAlreadyUsed = await bookModal.findOne({ ISBN:ISBN });
         if (isIsbnAlreadyUsed) {
             return res.status(403).send({ status: false, message: 'ISBN  already  exist' });
         }
-        const isTitleAlreadyUsed = await writerModal.findOne({ title:title });
+        const isTitleAlreadyUsed = await bookModal.findOne({ title:title });
             if (isTitleAlreadyUsed) {
                 return res.status(403).send({ status: false, message: 'title  already  exist' });
             }
@@ -53,14 +54,16 @@ const bookCreation = async function (req, res){
           }  
            // if (writerId === tokenUserId) {
                     let bookData={title,excerpt,userId,ISBN,category,subCategory,review,deletedAt,isDeleted,releasedAt}
+                    if(bookData.releasedAt==null){
                     bookData.releasedAt=new Date();
+                    }
                     let data = await bookModal.create(bookData);
                     return res.status(201).send({ status: true, data: data });
            // } else {
             //    return res.status(403).send({ status: false, msg: "Not Authorised, Please login from requested account" });
            // }
         
-    }catch (error) {
+    } catch (error) {
      res.status(500).send({ status: false, message: error.message });
    }
 }

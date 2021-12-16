@@ -9,6 +9,6 @@ const reviewController= require("../controllers/reviewControllers.js")
 
 router.post("/writer/register", writerController.creatWriter)
 router.post("/books",bookController.bookCreation)
-router.post("books/:bookId/review",reviewController.reviewData)
+router.post("/books/:bookId/review",reviewController.reviewData)
 
 module.exports = router;
