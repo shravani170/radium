@@ -20,7 +20,7 @@ const creatWriter = async function (req, res) {
       return;
     }
     const { title,name,phone,email,password}=writer
-    const isNameAlreadyUsed = await writerModal.findOne({ phone:phone,email:email,password:password });
+    const isNameAlreadyUsed = await writerModal.findOne({ phone:phone,email:email });
             if (isNameAlreadyUsed) {
                 return res.status(403).send({ status: false, message: 'writer  already  exist' });
             }
@@ -32,10 +32,7 @@ const creatWriter = async function (req, res) {
     if (sameEmail) {
         return res.status(403).send({ status: false, message: 'email already  exist,use different email' });
     }
-    const samePassword=await writerModal.findOne({ password:password });
-    if (samePassword) {
-        return res.status(403).send({ status: false, message: 'epassword already  exist,use different password' });
-    }
+    
     const {address}=writer
     if (!isValid(title)) {
       res.status(400).send({ status: false, message: 'Title  is required' });
@@ -81,4 +78,49 @@ if (!( /^(\+91[\-\s]?)?[0]?(91)?[789]\d{9}$/.test(phone))) {                //us
    }
  }
 
+ const loginWriter = async function (req, res) {
+  try {
+      const requestBody = req.body;
+      if(!isValidRequestBody(requestBody)) {
+          res.status(400).send({status: false, message: 'Invalid request parameters. Please provide login details'})
+          return
+      }
+
+      // Extract params
+      const {email, password} = requestBody;
+      
+      // Validation starts
+      if(!isValid(email)) {
+          res.status(400).send({status: false, message: `Email is required`})
+          return
+      }
+      
+      if(!(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email))) {
+          res.status(400).send({status: false, message: `Email should be a valid email address`})
+          return
+      }
+
+      if(!isValid(password)) {
+          res.status(400).send({status: false, message: `Password is required`})
+          return
+      }
+      // Validation ends
+
+      const author = await writerModal.findOne({email, password});
+
+      if(!author) {
+          res.status(401).send({status: false, message: `Invalid login credentials`});
+          return
+      }
+
+      let payload = { _id: validCredentials._id };
+      let token = jwt.sign(payload, "mySecretKey",{expiresIn: "1h"});
+      res.header('x-api-key', token);
+      res.status(200).send({status: true, message: `Author login successfull`, data: {token}});
+  } catch (error) {
+      res.status(500).send({status: false, message: error.message});
+  }
+}
+
 module.exports.creatWriter = creatWriter
+module.exports.loginWriter = loginWriter

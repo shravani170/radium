@@ -2,8 +2,8 @@ const mongoose = require('mongoose')
 
 const writerSchema = new mongoose.Schema({
 
-     title: {type:String,required:true, enum:['Mr', 'Mrs','Miss']},
-     name: {type:String,required:true},
+     title: {type:String,required:true, enum:['Mr', 'Mrs','Miss'],trim:true},
+     name: {type:String,required:true,trim:true},
      phone: {
           type:Number,
              unique:true,
@@ -27,13 +27,11 @@ const writerSchema = new mongoose.Schema({
             }, message: 'Please fill a valid email address', isAsync: false
         }, 
      }, 
-     password: { type: String,
-          trim: true,
-          unique: true,},
+     password: { type: String,required:true,trim: true},
      address: {
-       street: {type:String},
-       city: {type:String},
-       pincode: {type:String}
+       street: {type:String,trim:true},
+       city: {type:String,trim:true},
+       pincode: {type:String,trim:true}
      }, 
 
 }, { timestamps: true })
