@@ -15,7 +15,7 @@ const autherAuth = async (req, res, next) => {
             return;
         }
 
-        req.authorId = decoded.authorId;
+        req.userId = decoded;
 
         next()
     } catch (error) {
@@ -24,4 +24,4 @@ const autherAuth = async (req, res, next) => {
     }
 }
 
-module.exports = autherAuth
+module.exports.autherAuth = autherAuth

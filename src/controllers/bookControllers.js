@@ -1,5 +1,9 @@
-const bookModal=require('../modal/bookModal')
-const writerModal = require('../modal/writerModal')
+const mongoose = require('mongoose')
+const ObjectId = mongoose.Types.ObjectId
+const moment =require('moment')
+const bookModal=require('../model/bookModel')
+const reviewModal = require('../model/reviewModel')
+const writerModal = require('../model/writerModel')
 
 const isValid = function (value) {
     if (typeof value === 'undefined' || value === null) return false
@@ -10,11 +14,13 @@ const isValid = function (value) {
   const isValidRequestBody = function (writer) {
     return Object.keys(writer).length > 0
   }
+  const isValidObjectId = function(objectId) {
+    return mongoose.Types.ObjectId.isValid(objectId)
+}
 const bookCreation = async function (req, res){
     try{
         const book = req.body;
-        //const writerId = req.body.userId;
-        //const tokenUserId = req["x-api-key"]['_id']
+        //const writerId = req["x-api-key"]['_id']
         if (!isValidRequestBody(book)) {
             res.status(400).send({ status: false, message: 'Invalid request parameters. Please provide writer details' });
             return;
@@ -40,6 +46,10 @@ const bookCreation = async function (req, res){
             res.status(400).send({ status: false, message: 'userId is required' });
             return;
           }
+          if(!isValidObjectId(userId)) {
+            res.status(400).send({status: false, message: `${userId} is not a valid author id`})
+            return
+        }
           if (!isValid(ISBN)) {
             res.status(400).send({ status: false, message: 'ISBN is required' });
             return;
@@ -52,20 +62,165 @@ const bookCreation = async function (req, res){
             res.status(400).send({ status: false, message: 'subCategory is required' });
             return;
           }  
-           // if (writerId === tokenUserId) {
-                    let bookData={title,excerpt,userId,ISBN,category,subCategory,review,deletedAt,isDeleted,releasedAt}
-                    if(bookData.releasedAt==null){
-                    bookData.releasedAt=new Date();
-                    }
-                    let data = await bookModal.create(bookData);
-                    return res.status(201).send({ status: true, data: data });
-           // } else {
-            //    return res.status(403).send({ status: false, msg: "Not Authorised, Please login from requested account" });
-           // }
-        
+          if (req.userId._id == userId) {
+
+            let findid = await writerModal.findOne({ userId })
+
+            if (findid) {
+
+                book["releasedAt"] = moment().format("MMM Do YY");
+
+                let savedBook = await bookModal.create(book);
+
+                return res.status(201).send({ status: true, message: 'Success', data: savedBook });
+
+            } else {
+
+                return res.status(400).send({ status: false, messege: "Cant Find The Writer" });
+
+            }
+
+        } else {
+
+            return res.status(400).send({ status: false, messege: "You are not authorised" });
+
+        }
+          
     } catch (error) {
      res.status(500).send({ status: false, message: error.message });
    }
 }
+const getBooks=async function (req, res){
+  try{
+    
+    const filterQuery = {isDeleted: false}
+        const queryParams = req.query
+        if(isValidRequestBody(queryParams)) {
+          const {userId, category, subcategory} = queryParams
+
+          if(isValid(userId) && isValidObjectId(userId)) {
+              filterQuery['userId'] = userId
+          }
+
+          if(isValid(category)) {
+              filterQuery['category'] = category.trim()
+          }
+
+          if(isValid(subcategory)) {
+              const subcatArr = subcategory.trim().split(',').map(subcat => subcat.trim());
+              filterQuery['subcategory'] = {$all: subcatArr}
+          }
+      }
+
+      const allBooks = await bookModal.find(filterQuery)
+        
+      if(Array.isArray(allBooks) && allBooks.length===0) {
+          res.status(404).send({status: false, message: 'No blogs found'})
+          return
+      }
+
+      res.status(200).send({status: true, message: 'Blogs list', data: allBooks})
+  }catch (error) {
+     res.status(500).send({ status: false, message: error.message });
+   }
+}
+const getBooksById = async function (req, res){
+  try{
+    const param = req.params.bookId
+    if(!isValidObjectId(param)) {
+      res.status(400).send({status: false, message: `${param} is not a valid blog id`})
+      return
+  }
+  
+  let blog = await bookModal.findOne({_id: param})
+  let {title,excerpt,userId,category,subcategory,deleted,reviews,deletedAt,releasedAt,createdAt,updatedAt}=blog
+  let reviewsData = await reviewModal.find({ bookId: blog }).select({ createdAt: 0, updatedAt: 0, __v: 0 });
+  const book ={title,excerpt,userId,category,subcategory,deleted,reviews,deletedAt,releasedAt,createdAt,updatedAt,reviewsData}
+   res.status(200).send({staus:true,data:book})
+  }catch (error) {
+     res.status(500).send({ status: false, message: error.message });
+   }
+}
+const updateBook = async function(req,res){
+  try{
+      const bookId = req.params.bookId
+      let title = req.body.title
+      let excerpt = req.body.excerpt
+      let ISBN = req.body.ISBN
+      let releasedate = req.body.releasedate
+      if(!isValid(bookId)){
+          return res.status(400).send({messege:"Please Provide The Book Id"})
+      }
+      if(!isValidRequestBody(req.body)){
+          return res.status(400).send({messege:"Please Provide The Required Field"})
+      }
+      if(title){
+      if(!isValid(title)){
+          return res.status(400).send({messege:"Please Provide The Valid Title"})
+      }
+      const sametitle = await bookModal.findOne({ title: title.trim() });
+      if (sametitle) {
+          return res.status(403).send({ status: false, message: `${title} is already in used` });
+      }}
+      if(excerpt){
+      if(!isValid(excerpt)){
+          return res.status(400).send({messege:"Please Provide The Valid Excerpt"})
+      }}
+      if(ISBN){
+      if(!isValid(ISBN)){
+          return res.status(400).send({messege:"Please Provide The Valid ISBN"})
+      }
+      const SameISBN = await bookModal.findOne({ ISBN: ISBN.trim() });
+      if (SameISBN) {
+          return res.status(403).send({ status: false, message: `${ISBN} is already in used` });
+      }}
+      if(releasedate){
+      if(!isValid(releasedate)){
+          return res.status(400).send({messege:"Please Provide The Valid Date"})
+      }}
+      const check = await bookModal.findOne({ _id: bookId })
+      const id = check.userId
+      if (req.userId._id == id) {
+        const updatedBook = await bookModal.findOneAndUpdate({ _id: bookId ,isDeleted:false}, { title: title, excerpt: excerpt,ISBN:ISBN, releasedAt:releasedate },{ new: true })
+       return res.status(200).send({ status: true, message: 'Book updated successfully', data: updatedBook });
+      } else {
+       return res.status(404).send({ msg: "You Are Not Authorised To Update This" })
+      }
+  }catch (error) {
+      return res.status(500).send({ status: false, message: error.message });
+  }
+}
+const deleteBook = async function(req,res){
+  try{
+      const bookId = req.params.bookId
+      if(!isValidObjectId(bookId)) {
+        res.status(404).send({status: false, message: `${param} is not a valid book id`})
+        return
+    }
+      if(!isValid(bookId)){
+          return res.status(400).send({messege:"Please Provide The bookId"})
+      }
+      let findbook = await bookModal.findOne({_id:bookId})
+      if(!findbook){
+        return res.status(400).send({message:"Currently Their Is No bOOK"})
+      }
+      let id = findbook.userId
+      if (req.userId._id == id) {
+          let deletedbook = await bookModal.findOneAndUpdate({ _id: bookId, isDeleted: false }, { isDeleted: true, deletedAt: new Date() },{new:true})
+          if (deletedbook) {
+           return res.status(200).send({ status:true,messege: "Book Deleted Successfully",data:deletedbook })
+          }
+          else {
+           return res.status(404).send({ msg: "Book Has Been Already Deleted" })
+          }
+      }
+  }catch (error) {
+      return res.status(500).send({ status: false, message: error.message });
+  }
+}
 
 module.exports.bookCreation = bookCreation
+module.exports.getBooks = getBooks
+module.exports.getBooksById = getBooksById
+module.exports.updateBook=updateBook
+module.exports.deleteBook=deleteBook

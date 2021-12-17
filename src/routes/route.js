@@ -4,11 +4,17 @@ const router = express.Router();
 const writerController= require("../controllers/writerControllers.js")
 const bookController= require("../controllers/bookControllers.js")
 const reviewController= require("../controllers/reviewControllers.js")
+const writerAuths = require("../middlewares/writerAuth.js")
 
 
 
 router.post("/writer/register", writerController.creatWriter)
-router.post("/books",bookController.bookCreation)
+router.post("/books", writerAuths.autherAuth,bookController.bookCreation)
 router.post("/books/:bookId/review",reviewController.reviewData)
+router.post("/login",writerController.loginWriter)
+router.get("/books",bookController.getBooks)
+router.get("/books/:bookId",bookController.getBooksById)
+router.put("/books/:bookId",writerAuths.autherAuth,bookController.updateBook)
+router.delete("/books/:bookId",writerAuths.autherAuth,bookController.deleteBook)
 
 module.exports = router;

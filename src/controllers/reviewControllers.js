@@ -1,5 +1,5 @@
-const reviewModal=require('../modal/reviewModal')
-const bookModal=require('../modal/bookModal')
+const reviewModal=require('../model/reviewModel')
+const bookModal=require('../model/bookModel')
 
 const isValid = function (value) {
   if (typeof value === 'undefined' || value === null) return false
@@ -14,7 +14,7 @@ try{
     const parems =req.params.bookId
     const review = req.body
     if (!isValidRequestBody(review)) {
-      res.status(400).send({ status: false, message: 'Invalid request parameters. Please provide writer details' });
+      res.status(400).send({ status: false, message: 'Invalid request parameters. Please provide reviewer details' });
       return;
     }
     const bookId = review.bookId
@@ -27,16 +27,16 @@ try{
     }
     const {reviewedBy,rating}=review;
     if (!isValid(bookId)) {
-        res.status(400).send({ status: false, message: 'Title  is required' });
+        res.status(400).send({ status: false, message: 'bookId  is required' });
         return;
       }
     if (!isValid( reviewedBy)) {
-        res.status(400).send({ status: false, message: 'Title  is required' });
+        res.status(400).send({ status: false, message: 'reviewedBy  is required' });
         return;
       }
     
     if (!isValid(rating)) {
-        res.status(400).send({ status: false, message: 'Title  is required' });
+        res.status(400).send({ status: false, message: 'rating  is required' });
         return;
       }
     const reviewedAt=new Date();

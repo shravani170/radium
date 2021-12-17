@@ -1,4 +1,5 @@
-const writerModal = require('../modal/writerModal')
+const writerModal = require('../model/writerModel')
+const jwt = require("jsonwebtoken")
 
 
 const isValid = function (value) {
@@ -15,6 +16,7 @@ const creatWriter = async function (req, res) {
   try {
 
     const writer = req.body
+   
     if (!isValidRequestBody(writer)) {
       res.status(400).send({ status: false, message: 'Invalid request parameters. Please provide writer details' });
       return;
@@ -81,6 +83,7 @@ if (!( /^(\+91[\-\s]?)?[0]?(91)?[789]\d{9}$/.test(phone))) {                //us
  const loginWriter = async function (req, res) {
   try {
       const requestBody = req.body;
+      let validCredentials = await writerModal.findOne(requestBody);
       if(!isValidRequestBody(requestBody)) {
           res.status(400).send({status: false, message: 'Invalid request parameters. Please provide login details'})
           return
@@ -106,15 +109,15 @@ if (!( /^(\+91[\-\s]?)?[0]?(91)?[789]\d{9}$/.test(phone))) {                //us
       }
       // Validation ends
 
-      const author = await writerModal.findOne({email, password});
+      const user = await writerModal.findOne({email, password});
 
-      if(!author) {
+      if(!user) {
           res.status(401).send({status: false, message: `Invalid login credentials`});
           return
       }
 
       let payload = { _id: validCredentials._id };
-      let token = jwt.sign(payload, "mySecretKey",{expiresIn: "1h"});
+      let token = jwt.sign(payload, "group6Project4",{expiresIn: "1h"});
       res.header('x-api-key', token);
       res.status(200).send({status: true, message: `Author login successfull`, data: {token}});
   } catch (error) {
