@@ -136,6 +136,7 @@ const getBooksById = async function (req, res){
   let {title,excerpt,userId,category,subcategory,deleted,reviews,deletedAt,releasedAt,createdAt,updatedAt}=blog
   let reviewsData = await reviewModal.find({ bookId: blog }).select({ createdAt: 0, updatedAt: 0, __v: 0 });
   const book ={title,excerpt,userId,category,subcategory,deleted,reviews,deletedAt,releasedAt,createdAt,updatedAt,reviewsData}
+  data["reviews"]=data["reviewsData"].length
    res.status(200).send({staus:true,data:book})
   }catch (error) {
      res.status(500).send({ status: false, message: error.message });
